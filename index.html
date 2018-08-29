@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Roboto">
+    <title>Tic-tac-toe</title>
+</head>
+
+<body>
+    <section class="tic-tac">
+        <div class="buttons">
+            <button id="start" class="btn">Start</button>
+            <button id="clear" class="btn">Clear</button>
+        </div>
+        <div id="game-board" class="game-board-class">
+            <div id="0" class="tile top left">X</div>
+            <div id="1" class="tile top">O</div>
+            <div id="2" class="tile top right"></div>
+            <div id="3" class="tile middle left"></div>
+            <div id="4" class="tile middle"></div>
+            <div id="5" class="tile middle right"></div>
+            <div id="6" class="tile bottom left"></div>
+            <div id="7" class="tile bottom"></div>
+            <div id="8" class="tile bottom right"></div>
+        </div>
+        <div class="scorecards">
+            <div class="player-scorecard">
+                <h1><span id="playerNameDisplay">Player</span> score:</h1>
+                <span id="player-score"></span>
+            </div>
+            <div class="computer-scorecard">
+                <h1>Computer score:</h1>
+                <span id="computer-score"></span>
+            </div>
+        </div>
+
+    </section>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>

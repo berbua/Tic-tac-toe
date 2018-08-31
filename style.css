@@ -66,3 +66,9 @@
   display: flex;
   justify-content: space-between;
 }
+
+.scorecards span,
+h1 {
+  font-size: 30px;
+  text-align: center;
+}

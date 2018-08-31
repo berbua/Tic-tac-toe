@@ -2,19 +2,31 @@ const gameBoard = (() => {
   let boardArray = ["", "", "", "", "", "", "", "", ""];
   const boardTiles = document.querySelectorAll(".tile");
 
+  let animals = false;
+
   function render() {
-    boardTiles.forEach(tile => {
-      tile.innerHTML = boardArray[tile.id];
-    });
+    if (animals === "false") {
+      boardTiles.forEach(tile => {
+        tile.firstElementChild.innerHTML = boardArray[tile.id];
+      });
+    } else {
+    }
   }
   render();
 
   //clear board
+  console.log();
   function clear() {
-    for (let i = 0; i < boardArray.length; i++) {
-      boardArray[i] = "";
+    if (animals === false) {
+      for (let i = 0; i < boardArray.length; i++) {
+        boardArray[i] = "";
+      }
+    } else {
+      boardTiles.forEach(tile => {
+        tile.firstElementChild.removeChild();
+      });
+      render();
     }
-    render();
   }
   //clear assignment to button
   const clearButton = () => {
@@ -27,8 +39,24 @@ const gameBoard = (() => {
   };
   clearButton();
 
+  //Animals Switch
+  const animalsButton = document.getElementById("animalsBtn");
+  const animalsSwitch = () => {
+    animalsButton.addEventListener("click", function() {
+      gameBoard.animals = true;
+      clear();
+      gameBoard;
+      boardTiles.forEach(tile => {
+        let ico = document.createElement("i");
+        tile.firstElementChild.appendChild(ico);
+      });
+    });
+  };
+  animalsSwitch();
+
   //return object
   return {
+    animals,
     boardArray,
     boardTiles,
     render,
@@ -39,6 +67,7 @@ const gameBoard = (() => {
 const gameController = (() => {
   const boardTiles = document.querySelectorAll(".tile");
   let computerScore = 0;
+
   function computerPlay() {
     //pick random index
     let index;
@@ -48,18 +77,39 @@ const gameController = (() => {
       return index;
     };
     //check if tile is empty
-    if (gameBoard.boardArray[index] === "") {
-      gameBoard.boardArray[index] = "O";
-      gameBoard.render();
+    if (gameBoard.animals === "false") {
+      if (gameBoard.boardArray[index] === "") {
+        gameBoard.boardArray[index] = "O";
+        gameBoard.render();
+      } else {
+        while (true) {
+          getComputerChoiceIndex();
+          if (gameBoard.boardArray[index] === "") {
+            gameBoard.boardArray[index] = "O";
+            gameBoard.render();
+            break;
+          } else continue;
+        }
+      }
     } else {
-      while (true) {
-        getComputerChoiceIndex();
-        if (gameBoard.boardArray[index] === "") {
-          gameBoard.boardArray[index] = "O";
-          gameBoard.render();
-          console.log(index);
-          break;
-        } else continue;
+      if (gameBoard.boardArray[index] === "") {
+        tile.firstElementChild.firstElementChild.classList.add(
+          "fas",
+          "fa-kiwi-bird"
+        );
+        gameBoard.boardArray[index] = "O";
+      } else {
+        while (true) {
+          getComputerChoiceIndex();
+          if (gameBoard.boardArray[index] === "") {
+            gameBoard.boardArray[index] = "O";
+            boardTiles[index].firstElementChild.firstElementChild.classList.add(
+              "fas",
+              "fa-frog"
+            );
+            break;
+          } else continue;
+        }
       }
     }
   }
@@ -133,13 +183,27 @@ const gameController = (() => {
   const userPlay = () => {
     boardTiles.forEach(tile => {
       tile.addEventListener("click", function() {
-        if (this.innerHTML === "") {
-          this.innerHTML = "X";
-          gameBoard.boardArray[this.id] = "X";
-          setTimeout(computerPlay, 250);
-          setTimeout(checkResult, 750);
+        if (gameBoard.animals === false) {
+          if (tile.firstElementChild.innerHTML === "") {
+            tile.firstElementChild.innerHTML = "X";
+            gameBoard.boardArray[this.id] = "X";
+            setTimeout(computerPlay, 250);
+            setTimeout(checkResult, 750);
+          } else {
+            window.alert("Please select a free field");
+          }
         } else {
-          window.alert("Please select a free field");
+          if (gameBoard.boardArray[tile.id] === "") {
+            tile.firstElementChild.firstElementChild.classList.add(
+              "fas",
+              "fa-kiwi-bird"
+            );
+            gameBoard.boardArray[tile.id] = "X";
+            setTimeout(computerPlay, 250);
+            setTimeout(checkResult, 750);
+          } else {
+            window.alert("Please select a free field");
+          }
         }
       });
     });
@@ -148,6 +212,8 @@ const gameController = (() => {
   return {
     userPlay
   };
+
+  //Add animals feature
 })();
 
 //players
@@ -165,31 +231,3 @@ const player = (() => {
     score: score
   };
 })();
-
-console.log(player.userName);
-
-//const player1 = playerFactory;
-
-//Player factory - stara
-// const playerFactory = (() => {
-//   //factory
-//   let userName;
-//   let score = 0;
-//   const getUserName = (() => {
-//     const startButton = document.getElementById("start");
-//     const playerNameDisplay = document.getElementById("playerNameDisplay");
-//     startButton.addEventListener("click", function() {
-//       gameBoard.clear();
-//       userNameInput = window.prompt("Please enter your name");
-//       playerNameDisplay.innerHTML = userNameInput;
-//       this.userName = userNameInput;
-//     });
-//   })();
-//   //getUserName();
-//   //return object
-//   return {
-//     userName: this.userNameInput || "Player",
-//     score: this.score || 0,
-//     getUserName: getUserName
-//   };
-// })();

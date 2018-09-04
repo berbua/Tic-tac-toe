@@ -5,27 +5,31 @@ const gameBoard = (() => {
   let animals = false;
 
   function render() {
-    if (animals === "false") {
-      boardTiles.forEach(tile => {
-        tile.firstElementChild.innerHTML = boardArray[tile.id];
-      });
-    } else {
-    }
+    boardTiles.forEach(tile => {
+      tile.firstElementChild.innerHTML = boardArray[tile.id];
+    });
   }
   render();
 
   //clear board
-  console.log();
   function clear() {
     if (animals === false) {
       for (let i = 0; i < boardArray.length; i++) {
         boardArray[i] = "";
+        render();
       }
-    } else {
+    } else if (animals === true) {
       boardTiles.forEach(tile => {
-        tile.firstElementChild.removeChild();
+        const gameBoardDiv = document.getElementById("game-board");
+        icons = gameBoardDiv.querySelectorAll(".fas");
+        if (tile.firstElementChild.classList.contains("fas fa-kiwi-bird")) {
+          tile.firstElementChild.classList.remove("fas fa-kiwi-bird");
+        } else {
+          tile.firstElementChild.classList.remove("fas fa-frog");
+        }
+
+        //render();
       });
-      render();
     }
   }
   //clear assignment to button
@@ -35,17 +39,26 @@ const gameBoard = (() => {
       clear();
       player.score = 0;
       document.getElementById("player-score").innerHTML = player.score;
+      document.getElementById("computer-score").innerHTML = 0;
     });
   };
   clearButton();
 
   //Animals Switch
   const animalsButton = document.getElementById("animalsBtn");
+  const animalsRender = () => {
+    if (animals === true) {
+      boardTiles.forEach(tile => {
+        let ico = document.createElement("i");
+        tile.firstElementChild.appendChild(ico);
+      });
+    }
+  };
+  animalsRender();
   const animalsSwitch = () => {
     animalsButton.addEventListener("click", function() {
       gameBoard.animals = true;
       clear();
-      gameBoard;
       boardTiles.forEach(tile => {
         let ico = document.createElement("i");
         tile.firstElementChild.appendChild(ico);
@@ -57,6 +70,7 @@ const gameBoard = (() => {
   //return object
   return {
     animals,
+    animalsRender,
     boardArray,
     boardTiles,
     render,
@@ -77,14 +91,16 @@ const gameController = (() => {
       return index;
     };
     //check if tile is empty
-    if (gameBoard.animals === "false") {
+    if (gameBoard.animals === false) {
       if (gameBoard.boardArray[index] === "") {
+        console.log(1);
         gameBoard.boardArray[index] = "O";
         gameBoard.render();
       } else {
         while (true) {
           getComputerChoiceIndex();
           if (gameBoard.boardArray[index] === "") {
+            console.log(2);
             gameBoard.boardArray[index] = "O";
             gameBoard.render();
             break;
@@ -146,6 +162,7 @@ const gameController = (() => {
         player.score += 1;
         document.getElementById("player-score").innerHTML = player.score;
         gameBoard.clear();
+        gameBoard.animalsRender();
 
         break;
       case gameBoard.boardArray[0] === "O" &&
@@ -212,8 +229,6 @@ const gameController = (() => {
   return {
     userPlay
   };
-
-  //Add animals feature
 })();
 
 //players
